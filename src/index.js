@@ -4,3 +4,4 @@ import './container/block.js';
 import './column/block.js';
 import './row/block.js';
 import './button/block.js';
+import './tankstellen-koeln/block.js';
