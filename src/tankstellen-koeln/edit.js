@@ -4,12 +4,30 @@ import {
 	CheckboxControl,
 	PanelBody,
 	SelectControl,
+	ComboboxControl,
+	ToggleControl,
+	TextControl 
 } from '@wordpress/components';
-import { useSelect } from '@wordpress/data';
+
 import { applyFilters } from '@wordpress/hooks';
-import { InnerBlocks, InspectorControls } from '@wordpress/block-editor';
+
+import { 
+	InspectorControls,
+	useBlockProps
+ } from '@wordpress/block-editor';
 
 import { isBootstrap5Active } from '../helper';
+
+// tankstellen Import
+import tankstellen from '../assets/tankstellen.json';
+
+// react leaflet
+import { 
+	MapContainer, 
+	TileLayer, 
+	Marker, 
+	Popup
+} from 'react-leaflet';
 
 let marginAfterOptions = [
 	{
@@ -38,86 +56,72 @@ marginAfterOptions = [
 	...marginAfterOptions,
 ];
 
-let fluidBreakpointOptions = [
-	{
-		label: __( 'Xl', 'wp-bootstrap-blocks' ),
-		value: 'xl',
-	},
-	{
-		label: __( 'Lg', 'wp-bootstrap-blocks' ),
-		value: 'lg',
-	},
-	{
-		label: __( 'Md', 'wp-bootstrap-blocks' ),
-		value: 'md',
-	},
-	{
-		label: __( 'Sm', 'wp-bootstrap-blocks' ),
-		value: 'sm',
-	},
-];
 
-if ( isBootstrap5Active() ) {
-	fluidBreakpointOptions = [
-		{
-			label: __( 'Xxl', 'wp-bootstrap-blocks' ),
-			value: 'xxl',
-		},
-		...fluidBreakpointOptions,
-	];
+
+// MARK: Mapping options from JSON-Data
+
+const petrolStationOpotions = (data) => {
+	let output = data.features.map( obj => ( {
+			label: 		obj.attributes.adresse, 
+			value:  	obj.attributes.adresse,
+			id: 	 	obj.attributes.objectid,
+			geometry: 	[obj.geometry.y , obj.geometry.x]
+			} 
+		)
+	);
+
+	return output;
 }
 
-fluidBreakpointOptions = [
-	{
-		label: __( 'No breakpoint selected', 'wp-bootstrap-blocks' ),
-		value: '',
-	},
-	...fluidBreakpointOptions,
-];
-
-const BootstrapContainerEdit = ( {
-	attributes,
+export default function Edit ( {
+	attributes: {marginAfter, map, cardLayout, displayMap, mapZoom},
 	className,
 	clientId,
 	setAttributes,
-} ) => {
-	const { isFluid, fluidBreakpoint, marginAfter } = attributes;
-	const { hasChildBlocks } = useSelect( ( select ) => {
-		const { getBlockOrder } = select( 'core/block-editor' );
+} ) {
 
-		return {
-			hasChildBlocks: getBlockOrder( clientId ).length > 0,
-		};
-	} );
+	className = `${className} card`;
 
 	return (
 		<>
+
 			<InspectorControls>
-				<PanelBody title={ __( 'Fluid', 'wp-bootstrap-blocks' ) }>
-					<CheckboxControl
-						label={ __( 'Fluid', 'wp-bootstrap-blocks' ) }
-						checked={ isFluid }
+				<PanelBody title={ __( 'Petrol station configuration', 'wp-boostrap-blocks')}>
+					<ToggleControl
+						label={ __( 'Display only one petrol station', 'wp-bootstrap-blocks' ) }
+						checked={ displayMap.single }
 						onChange={ ( isChecked ) => {
-							setAttributes( { isFluid: isChecked } );
+							setAttributes( { displayMap:{ single: isChecked, display: displayMap.display } } );
 						} }
 					/>
-					<SelectControl
-						label={ __(
-							'Fluid Breakpoint',
-							'wp-bootstrap-blocks'
-						) }
-						disabled={ ! isFluid }
-						value={ fluidBreakpoint }
-						options={ fluidBreakpointOptions }
-						onChange={ ( selectedFluidBreakpoint ) => {
-							setAttributes( {
-								fluidBreakpoint: selectedFluidBreakpoint,
-							} );
-						} }
-						help={ __(
-							'Fluid breakpoints only work with Bootstrap v4.4+. The container will be 100% wide until the specified breakpoint is reached, after which max-widths for each of the higher breakpoints will be applied.',
-							'wp-bootstrap-blocks'
-						) }
+
+					{displayMap.single === true &&
+					
+						<ComboboxControl
+							label={ __('Search a petrol station', 'wp-bootstrap-blocks')}
+							onChange={(value) => {
+								setAttributes({
+									map: {
+										id: 	  petrolStationOpotions(tankstellen).find( obj => obj.label == value).id,
+										geometry: petrolStationOpotions(tankstellen).find( obj => obj.label == value).geometry,
+										adresse:  value								
+									}
+								});
+							}}
+							placehlder={__('Petrol station adress', 'wp-bootstrap-blocks')}
+							value={map.adresse}
+							options= { petrolStationOpotions(tankstellen) }
+						/>
+					
+					}
+
+				</PanelBody>
+				<PanelBody title={ __( 'Card Layout', 'wp-bootstrap-blocks' ) }>
+					<TextControl 
+						label={__('Zoom')}
+						type='number'
+						value={mapZoom}
+						onChange={ (value) => { setAttributes( {mapZoom: value} ) } }
 					/>
 				</PanelBody>
 				<PanelBody title={ __( 'Margin', 'wp-bootstrap-blocks' ) }>
@@ -133,17 +137,45 @@ const BootstrapContainerEdit = ( {
 					/>
 				</PanelBody>
 			</InspectorControls>
-			<div className={ className }>
-				<InnerBlocks
-					renderAppender={
-						hasChildBlocks
-							? undefined
-							: () => <InnerBlocks.ButtonBlockAppender />
-					}
-				/>
+
+
+			<div className={className}>
+
+
+
+				<div class="card-body">
+				{displayMap.display === true &&
+				<>
+					<link 	
+						rel="stylesheet" 
+						href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+						integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+						crossorigin=""
+					/>
+
+					<MapContainer 
+						style={{
+							height: "200px"
+						}}
+						center={map.geometry} 
+						zoom={mapZoom} 
+						scrollWheelZoom={false}
+					>
+						<TileLayer
+							attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+							url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+						/>
+						<Marker position={map.geometry}>
+							<Popup>
+							A pretty CSS3 popup. <br /> Easily customizable.
+							</Popup>
+						</Marker>
+					</MapContainer>
+				</>
+				}
+					<h5 class="card-title">{map.adresse}</h5>
+				</div>
 			</div>
 		</>
 	);
 };
-
-export default BootstrapContainerEdit;

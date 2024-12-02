@@ -1,8 +1,8 @@
 {
 	"$schema": "https://schemas.wp.org/trunk/block.json",
-	"apiVersion": 1,
-	"name": "wp-bootstrap-blocks/container",
-	"title": "Container",
+	"apiVersion": 2,
+	"name": "wp-bootstrap-blocks/tankstellen-koeln",
+	"title": "Tankstellen Köln",
 	"category": "wp-bootstrap-blocks",
 	"keywords": [
 		"Container",
@@ -10,7 +10,33 @@
 		"Bootstrap"
 	],
 	"supports": {
-		"align": false
+		"align": false,
+		"color": {
+			"background": true,
+			"text": true
+		}
+	},
+	"attributes": {
+		"map":{
+			"type": "object",
+			"default": 
+			 {
+				"id": 0,
+				"geometry": [0,0],
+				"adresse": ""
+			 }
+		},
+		"mapZoom":{
+			"type":"number",
+			"default": 13
+		},
+		"displayMap":{
+			"type": "object",
+			"default": {"single": false, "display": true}
+		},
+		"cardLayout":{
+			"type": "string"
+		}
 	},
 	"textdomain": "wp-bootstrap-blocks",
 	"version": "5.0.0"
