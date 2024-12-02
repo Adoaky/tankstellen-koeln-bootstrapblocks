@@ -22,13 +22,17 @@
 			"default": 
 			 {
 				"id": 0,
-				"geometry": [0,0],
+				"geometry": [50.923288946783785,6.979491940887355],
 				"adresse": ""
 			 }
 		},
 		"mapZoom":{
 			"type":"number",
-			"default": 13
+			"default": 10
+		},
+		"mapHeight":{
+			"type":"number",
+			"default":200
 		},
 		"displayMap":{
 			"type": "object",
