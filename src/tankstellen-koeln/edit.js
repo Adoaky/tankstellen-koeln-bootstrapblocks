@@ -28,6 +28,7 @@ import {
 	Marker, 
 	Popup
 } from 'react-leaflet';
+import { useState } from '@wordpress/element';
 
 let marginAfterOptions = [
 	{
@@ -56,7 +57,12 @@ marginAfterOptions = [
 	...marginAfterOptions,
 ];
 
-
+let cardLayoutOptions = [
+	{ label: __('Top', 		'wp-bootstrap-blocks'), value: 'top'},
+	{ label: __('bottom', 	'wp-bootstrap-blocks'), value: 'bottom'},
+	{ label: __('Left', 	'wp-bootstrap-blocks'), value: 'left'},
+	{ label: __('Right', 	'wp-bootstrap-blocks'), value: 'right'},
+]
 
 // MARK: Mapping options from JSON-Data
 
@@ -74,13 +80,17 @@ const petrolStationOpotions = (data) => {
 }
 
 export default function Edit ( {
-	attributes: {marginAfter, map, cardLayout, displayMap, mapZoom},
+	attributes: {marginAfter, map, cardLayout, displayMap, mapZoom, mapHeight},
 	className,
 	clientId,
 	setAttributes,
 } ) {
 
-	className = `${className} card`;
+	// MARK: rerender map
+	const [seed, setSeed] = useState(1);
+	const reset = () => { setSeed(Math.random()) }
+
+	className = `${className} ${cardLayout}`;
 
 	return (
 		<>
@@ -91,7 +101,15 @@ export default function Edit ( {
 						label={ __( 'Display only one petrol station', 'wp-bootstrap-blocks' ) }
 						checked={ displayMap.single }
 						onChange={ ( isChecked ) => {
-							setAttributes( { displayMap:{ single: isChecked, display: displayMap.display } } );
+							setAttributes( { 
+								displayMap:{ single: isChecked, display: displayMap.display },
+								map: {
+									id: 0,
+									geometry: [50.923288946783785,6.979491940887355],
+									adresse:  ""								
+								}
+							} );
+							reset();
 						} }
 					/>
 
@@ -107,21 +125,44 @@ export default function Edit ( {
 										adresse:  value								
 									}
 								});
+								reset();
 							}}
 							placehlder={__('Petrol station adress', 'wp-bootstrap-blocks')}
 							value={map.adresse}
 							options= { petrolStationOpotions(tankstellen) }
+							allowReset={false}
 						/>
 					
 					}
-
-				</PanelBody>
-				<PanelBody title={ __( 'Card Layout', 'wp-bootstrap-blocks' ) }>
 					<TextControl 
 						label={__('Zoom')}
 						type='number'
 						value={mapZoom}
-						onChange={ (value) => { setAttributes( {mapZoom: value} ) } }
+						onChange={ (value) => { 
+							setAttributes( {mapZoom: value} ) 
+							reset();
+						} }
+					/>
+				</PanelBody>
+				<PanelBody title={ __( 'Card Layout', 'wp-bootstrap-blocks' ) }>
+					<SelectControl
+						label={ __( 'Map Position', 'wp-bootstrap-blocks' ) }
+						value={ cardLayout }
+						options={ cardLayoutOptions }
+						onChange={ ( value ) => {
+							setAttributes( {
+								cardLayout: value,
+							} );
+						} }
+					/>
+					<TextControl 
+						label={__('Map height')}
+						type='number'
+						value={mapHeight}
+						onChange={ (value) => { 
+							setAttributes( {mapHeight: value} ) 
+							reset();
+						} }
 					/>
 				</PanelBody>
 				<PanelBody title={ __( 'Margin', 'wp-bootstrap-blocks' ) }>
@@ -141,10 +182,7 @@ export default function Edit ( {
 
 			<div className={className}>
 
-
-
-				<div class="card-body">
-				{displayMap.display === true &&
+			{displayMap.display === true &&
 				<>
 					<link 	
 						rel="stylesheet" 
@@ -155,11 +193,12 @@ export default function Edit ( {
 
 					<MapContainer 
 						style={{
-							height: "200px"
+							height: `${mapHeight}px`
 						}}
 						center={map.geometry} 
 						zoom={mapZoom} 
 						scrollWheelZoom={false}
+						key={seed}
 					>
 						<TileLayer
 							attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -167,12 +206,14 @@ export default function Edit ( {
 						/>
 						<Marker position={map.geometry}>
 							<Popup>
-							A pretty CSS3 popup. <br /> Easily customizable.
+							{map.adresse}
 							</Popup>
 						</Marker>
 					</MapContainer>
 				</>
 				}
+
+				<div class="card">
 					<h5 class="card-title">{map.adresse}</h5>
 				</div>
 			</div>
