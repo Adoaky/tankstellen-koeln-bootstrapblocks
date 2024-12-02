@@ -10,11 +10,7 @@
 		"Bootstrap"
 	],
 	"supports": {
-		"align": false,
-		"color": {
-			"background": true,
-			"text": true
-		}
+		"align": false
 	},
 	"attributes": {
 		"map":{

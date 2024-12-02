@@ -11,6 +11,7 @@ use WP_Bootstrap_Blocks\Button\Button_Block_Type;
 use WP_Bootstrap_Blocks\Column\Column_Block_Type;
 use WP_Bootstrap_Blocks\Container\Container_Block_Type;
 use WP_Bootstrap_Blocks\Row\Row_Block_Type;
+use WP_Bootstrap_Blocks\Tankstellen\Tankstellen_Block_Type;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -113,6 +114,7 @@ class WP_Bootstrap_Blocks {
 		require_once WP_BOOTSTRAP_BLOCKS_ABSPATH . 'src/row/class-row-block-type.php';
 		require_once WP_BOOTSTRAP_BLOCKS_ABSPATH . 'src/column/class-column-block-type.php';
 		require_once WP_BOOTSTRAP_BLOCKS_ABSPATH . 'src/button/class-button-block-type.php';
+		require_once WP_BOOTSTRAP_BLOCKS_ABSPATH . 'src/tankstellen-koeln/class-tankstellen-block-type.php';
 		require_once WP_BOOTSTRAP_BLOCKS_ABSPATH . 'src/settings/class-settings.php';
 	}
 
@@ -275,6 +277,7 @@ class WP_Bootstrap_Blocks {
 		new Row_Block_Type();
 		new Column_Block_Type();
 		new Button_Block_Type();
+		// new Tankstellen_Block_Type();
 	}
 
 	/**

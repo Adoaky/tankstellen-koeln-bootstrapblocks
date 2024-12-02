@@ -79,6 +79,22 @@ const petrolStationOpotions = (data) => {
 	return output;
 }
 
+const addEveryMarker = () => {
+	let output = [];
+	tankstellen.features.forEach( station => {
+			output.push(
+				<Marker position={[station.geometry.y , station.geometry.x]}>
+					<Popup>
+						{station.attributes.adresse}
+					</Popup>
+				</Marker>
+			)
+		}
+	)
+	
+	return output;
+}
+
 export default function Edit ( {
 	attributes: {marginAfter, map, cardLayout, displayMap, mapZoom, mapHeight},
 	className,
@@ -204,17 +220,29 @@ export default function Edit ( {
 							attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
 							url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
 						/>
-						<Marker position={map.geometry}>
-							<Popup>
-							{map.adresse}
-							</Popup>
-						</Marker>
+						
+						{displayMap.single !== true &&
+							addEveryMarker()
+						}
+						
+						{displayMap.single !== false && map.adresse !== "" &&
+							
+							<Marker position={map.geometry}>
+								<Popup>
+								{map.adresse}
+								</Popup>
+							</Marker>
+					
+						}
+
 					</MapContainer>
 				</>
 				}
 
 				<div class="card">
-					<h5 class="card-title">{map.adresse}</h5>
+					<h5 class="card-title">
+						{ displayMap.single !== false ? map.adresse : __('Search..', 'wp-boostrap-blocks') }
+					</h5>
 				</div>
 			</div>
 		</>

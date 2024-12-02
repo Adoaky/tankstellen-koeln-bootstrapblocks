@@ -5,7 +5,7 @@
  * @package wp-bootstrap-blocks/container
  */
 
-namespace WP_Bootstrap_Blocks\Container;
+namespace WP_Bootstrap_Blocks\Tankstellen;
 
 use WP_Bootstrap_Blocks\Block_Type;
 
@@ -18,13 +18,13 @@ if ( ! class_exists( '\WP_Bootstrap_Blocks\Container\Container_Block_Type', fals
 	/**
 	 * Class Container_Block_Type
 	 */
-	class Container_Block_Type extends Block_Type {
+	class Tankstellen_Block_Type extends Block_Type {
 		/**
 		 * Name of block type including namespace.
 		 *
 		 * @var string
 		 */
-		protected $name = 'wp-bootstrap-blocks/container';
+		protected $name = 'wp-bootstrap-blocks/tankstellen';
 
 		/**
 		 * Block attributes.
@@ -32,10 +32,22 @@ if ( ! class_exists( '\WP_Bootstrap_Blocks\Container\Container_Block_Type', fals
 		 * @var array
 		 */
 		protected $attributes = array(
-			'isFluid' => array(
-				'type' => 'boolean',
+			'map' => array(
+				'type' => 'object',
 			),
-			'fluidBreakpoint' => array(
+			'mapZoom' => array(
+				'type' => 'number',
+			),
+			'mapHeight' => array(
+				'type' => 'string',
+			),
+			'displayMap' => array(
+				'type' => 'object',
+			),
+			'mapHeight' => array(
+				'type' => 'number',
+			),
+			'cardLayout' => array(
 				'type' => 'string',
 			),
 			'marginAfter' => array(
@@ -49,9 +61,18 @@ if ( ! class_exists( '\WP_Bootstrap_Blocks\Container\Container_Block_Type', fals
 		 * @var array
 		 */
 		protected $default_attributes = array(
-			'isFluid' => false,
-			'fluidBreakpoint' => '',
-			'marginAfter' => 'mb-2',
+			'map' => [ 
+				"id" => 0, 
+				"geometry" => [50.923288946783785,6.979491940887355], 
+				"adresse"=>  ""],
+			'mapZoom' => 10,
+			'mapHeight' => 200,
+			'displayMap' => [
+				"single" => false, 
+				"display" => true
+			],
+			'cardLayout' => 'top',
+			'marginAfter' => 'mb-2'
 		);
 	}
 
