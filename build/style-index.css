@@ -1,9 +1,2 @@
-/*!*******************************************************************************************************************************************************************************************************************************************!*\
-  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[4].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[4].use[2]!./node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[4].use[3]!./src/row/style.scss ***!
-  \*******************************************************************************************************************************************************************************************************************************************/
-.wp-bootstrap-blocks-row.row.alignfull {
-  margin-left: 0;
-  margin-right: 0;
-}
-
-/*# sourceMappingURL=style-index.css.map*/
+.wp-bootstrap-blocks-row.row.alignfull{margin-left:0;margin-right:0}
+.wp-bootstrap-blocks-tankstellen{display:flex;flex-direction:column}.wp-bootstrap-blocks-tankstellen.bottom .leaflet-container,.wp-bootstrap-blocks-tankstellen.top .leaflet-container{margin-left:-15px;margin-right:-15px;width:calc(100% + 30px)}.wp-bootstrap-blocks-tankstellen.bottom .leaflet-container{order:2}.wp-bootstrap-blocks-tankstellen.bottom .card-body{order:1}.wp-bootstrap-blocks-tankstellen.left{flex-direction:row}.wp-bootstrap-blocks-tankstellen.left .leaflet-container{margin-left:-15px;width:calc(100% + 15px)}.wp-bootstrap-blocks-tankstellen.right{flex-direction:row}.wp-bootstrap-blocks-tankstellen.right .leaflet-container{margin-right:-15px;order:2;width:calc(100% + 15px)}.wp-bootstrap-blocks-tankstellen.right .card-body{order:1}.wp-bootstrap-blocks-tankstellen .leaflet-container{height:var(--map-height,200px)}@media screen and (width <= 450px){.wp-bootstrap-blocks-tankstellen:is(.left,.right){flex-direction:column}.wp-bootstrap-blocks-tankstellen:is(.left,.right) .leaflet-container{margin-left:-15px;margin-right:-15px;order:1;width:calc(100% + 30px)}.wp-bootstrap-blocks-tankstellen:is(.left,.right) .card-body{order:2}}

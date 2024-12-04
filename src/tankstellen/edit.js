@@ -15,7 +15,7 @@ import {
 	InspectorControls,
 	useBlockProps
  } from '@wordpress/block-editor';
-
+import { useState } from '@wordpress/element';
 import { isBootstrap5Active } from '../helper';
 
 // tankstellen Import
@@ -28,7 +28,8 @@ import {
 	Marker, 
 	Popup
 } from 'react-leaflet';
-import { useState } from '@wordpress/element';
+
+
 
 let marginAfterOptions = [
 	{
@@ -57,6 +58,26 @@ marginAfterOptions = [
 	...marginAfterOptions,
 ];
 
+let fluidBreakpointOptions = [
+	{
+		label: __( 'Xl', 'wp-bootstrap-blocks' ),
+		value: 'xl',
+	},
+	{
+		label: __( 'Lg', 'wp-bootstrap-blocks' ),
+		value: 'lg',
+	},
+	{
+		label: __( 'Md', 'wp-bootstrap-blocks' ),
+		value: 'md',
+	},
+	{
+		label: __( 'Sm', 'wp-bootstrap-blocks' ),
+		value: 'sm',
+	},
+];
+
+// MARK: Card Layoutoptions
 let cardLayoutOptions = [
 	{ label: __('Top', 		'wp-bootstrap-blocks'), value: 'top'},
 	{ label: __('bottom', 	'wp-bootstrap-blocks'), value: 'bottom'},
@@ -96,9 +117,7 @@ const addEveryMarker = () => {
 }
 
 export default function Edit ( {
-	attributes: {marginAfter, map, cardLayout, displayMap, mapZoom, mapHeight},
-	className,
-	clientId,
+	attributes: {isFluid, fluidBreakpoint, marginAfter, map, cardLayout, displayMap, mapZoom, mapHeight, tankstellenList},
 	setAttributes,
 } ) {
 
@@ -106,7 +125,9 @@ export default function Edit ( {
 	const [seed, setSeed] = useState(1);
 	const reset = () => { setSeed(Math.random()) }
 
-	className = `${className} ${cardLayout}`;
+	const blockProps = useBlockProps({
+		className: `${cardLayout} ${fluidBreakpoint} ${marginAfter}`
+	});
 
 	return (
 		<>
@@ -125,6 +146,9 @@ export default function Edit ( {
 									adresse:  ""								
 								}
 							} );
+							setAttributes({
+								tankstellenList: petrolStationOpotions(tankstellen) 
+							})
 							reset();
 						} }
 					/>
@@ -181,6 +205,33 @@ export default function Edit ( {
 						} }
 					/>
 				</PanelBody>
+				<PanelBody title={ __( 'Fluid', 'wp-bootstrap-blocks' ) }>
+					<CheckboxControl
+						label={ __( 'Fluid', 'wp-bootstrap-blocks' ) }
+						checked={ isFluid }
+						onChange={ ( isChecked ) => {
+							setAttributes( { isFluid: isChecked } );
+						} }
+					/>
+					<SelectControl
+						label={ __(
+							'Fluid Breakpoint',
+							'wp-bootstrap-blocks'
+						) }
+						disabled={ ! isFluid }
+						value={ fluidBreakpoint }
+						options={ fluidBreakpointOptions }
+						onChange={ ( selectedFluidBreakpoint ) => {
+							setAttributes( {
+								fluidBreakpoint: selectedFluidBreakpoint,
+							} );
+						} }
+						help={ __(
+							'Fluid breakpoints only work with Bootstrap v4.4+. The container will be 100% wide until the specified breakpoint is reached, after which max-widths for each of the higher breakpoints will be applied.',
+							'wp-bootstrap-blocks'
+						) }
+					/>
+				</PanelBody>
 				<PanelBody title={ __( 'Margin', 'wp-bootstrap-blocks' ) }>
 					<SelectControl
 						label={ __( 'Margin After', 'wp-bootstrap-blocks' ) }
@@ -196,7 +247,7 @@ export default function Edit ( {
 			</InspectorControls>
 
 
-			<div className={className}>
+			<div {...blockProps}>
 
 			{displayMap.display === true &&
 				<>
@@ -239,8 +290,8 @@ export default function Edit ( {
 				</>
 				}
 
-				<div class="card">
-					<h5 class="card-title">
+				<div className="card">
+					<h5 className="card-title">
 						{ displayMap.single !== false ? map.adresse : __('Search..', 'wp-boostrap-blocks') }
 					</h5>
 				</div>

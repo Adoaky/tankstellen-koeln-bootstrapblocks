@@ -1,8 +1,8 @@
 <?php
 /**
- * Register wp-bootstrap-blocks/container block type.
+ * Register wp-bootstrap-blocks/tankstellen block type.
  *
- * @package wp-bootstrap-blocks/container
+ * @package wp-bootstrap-blocks/tankstellen
  */
 
 namespace WP_Bootstrap_Blocks\Tankstellen;
@@ -13,10 +13,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-if ( ! class_exists( '\WP_Bootstrap_Blocks\Container\Container_Block_Type', false ) ) :
+if ( ! class_exists( '\WP_Bootstrap_Blocks\Tankstellen\Tankstellen_Block_Type', false ) ) :
 
 	/**
-	 * Class Container_Block_Type
+	 * Class Tankstellen_Block_Type
 	 */
 	class Tankstellen_Block_Type extends Block_Type {
 		/**
@@ -31,7 +31,7 @@ if ( ! class_exists( '\WP_Bootstrap_Blocks\Container\Container_Block_Type', fals
 		 *
 		 * @var array
 		 */
-		protected $attributes = array(
+		protected $attributes = [
 			'map' => array(
 				'type' => 'object',
 			),
@@ -39,21 +39,27 @@ if ( ! class_exists( '\WP_Bootstrap_Blocks\Container\Container_Block_Type', fals
 				'type' => 'number',
 			),
 			'mapHeight' => array(
-				'type' => 'string',
+				'type' => 'number',
 			),
 			'displayMap' => array(
 				'type' => 'object',
 			),
-			'mapHeight' => array(
-				'type' => 'number',
-			),
 			'cardLayout' => array(
+				'type' => 'string',
+			),
+			'tankstellenList' => array(
+				'type' => 'object',
+			),
+			'isFluid' => array(
+				'type' => 'boolean',
+			),
+			'fluidBreakpoint' => array(
 				'type' => 'string',
 			),
 			'marginAfter' => array(
 				'type' => 'string',
 			),
-		);
+		];
 
 		/**
 		 * Default values of block attributes.
@@ -72,8 +78,12 @@ if ( ! class_exists( '\WP_Bootstrap_Blocks\Container\Container_Block_Type', fals
 				"display" => true
 			],
 			'cardLayout' => 'top',
-			'marginAfter' => 'mb-2'
+			'tankstellenList' => [''],
+			'isFluid' => false,
+			'fluidBreakpoint' => '',
+			'marginAfter' => 'mb-2',
 		);
+
 	}
 
 endif;

@@ -1,0 +1,36 @@
+@import "../assets/gutenberg";
+
+//reset displaysettings
+.wp-block-wp-bootstrap-blocks-tankstellen{
+	display: flex;
+	flex-direction: column;
+
+	&.bottom{
+		.leaflet-container {
+			order: 2
+		}
+		.card{
+			order: 1
+		}
+	}
+	&.left{
+		flex-direction: row;
+	}
+	&.right{
+		flex-direction: row;
+		.leaflet-container {
+			order: 2
+		}
+		.card{
+			order: 1
+		}
+	} 
+}
+.card{
+	max-width: 100%;
+	margin-top: 0;
+}
+
+.leaflet-container{
+	width: 100%;
+}

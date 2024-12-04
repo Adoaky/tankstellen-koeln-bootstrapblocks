@@ -1,0 +1,19 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 2,
+	"name": "wp-bootstrap-blocks/tankstellen",
+	"title": "Tankstellen Köln",
+	"category": "wp-bootstrap-blocks",
+	"keywords": [
+		"Container",
+		"Bootstrap Container",
+		"Bootstrap"
+	],
+	"supports": {
+		"align": true
+	},
+	
+	"textdomain": "wp-bootstrap-blocks",
+	"viewScript": "file:./leaflet.js",
+	"version": "5.0.0"
+}

@@ -1,0 +1,66 @@
+.wp-bootstrap-blocks-tankstellen{
+
+	display: flex;
+	flex-direction: column;
+	&.top .leaflet-container{
+		margin-right: -15px;
+		margin-left: -15px;
+		width: calc(100% + 30px);
+	}
+	&.bottom{
+		.leaflet-container {
+			order: 2;
+			margin-right: -15px;
+			margin-left: -15px;
+			width: calc(100% + 30px);
+		}
+		.card-body{
+			order: 1
+		}
+	}
+	&.left{
+		flex-direction: row;
+		.leaflet-container{
+			margin-left: -15px;
+			width: calc(100% + 15px);
+		}
+	}
+	&.right{
+		flex-direction: row;
+		.leaflet-container {
+			order: 2;
+			margin-right: -15px;
+			width: calc(100% + 15px);
+		}
+		.card-body{
+			order: 1
+		}
+	} 
+
+
+	.leaflet-container{
+		height: var(--map-height, 200px);
+		
+	}
+}
+
+@media screen and (width <= 450px) {
+	
+	.wp-bootstrap-blocks-tankstellen{
+		&:is(.left,.right){
+			flex-direction: column;
+			
+			.leaflet-container{
+				margin-right: -15px;
+				margin-left: -15px;
+				width: calc(100% + 30px);
+				order: 1;
+			}
+			.card-body{
+				order: 2;
+			}
+
+		}
+	
+	}
+}
